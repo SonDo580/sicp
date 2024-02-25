@@ -12,7 +12,7 @@
 
 ;; Design a multiplication procedure that uses a logarithmic number of steps
 ;; When b is odd, use the formula
-;; a * b = (2*a) * ((b - 1 + 1) / 2) =  (2*a) * (b-1)/2) + a
+;; a * b = (2*a) * ((b - 1 + 1) / 2) =  (2*a) * (b-1)/2 + a
 (define (fast-mult a b)
   (cond ((or (= a 0) (= b 0)) 0)
         ((= b 1) a)
