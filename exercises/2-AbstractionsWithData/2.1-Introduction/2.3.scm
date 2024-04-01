@@ -1,4 +1,5 @@
 ;; Represent rectangles in a plane
+
 ;; For simplicity, assume that: 
 ;; - rectangles have sides parallel to x-axis and y-axis
 ;; - top-left and bottom-right are valid 
