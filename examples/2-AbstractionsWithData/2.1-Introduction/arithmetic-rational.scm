@@ -50,3 +50,13 @@
 (print-rat (mul-rat one-half one-third))
 (print-rat (add-rat one-third one-third))
 
+;; An alternate way: perform the reduction in selectors, not constructor
+(define (make-rat-2 n d) (cons n d))
+
+(define (numer-2 x)
+  (let ((g (gcd (car x) (cdr x))))
+    (/ (car x) g)))
+
+(define (denom-2 x)
+  (let ((g (gcd (car x) (cdr x))))
+    (/ (cdr x) g)))
