@@ -2,9 +2,7 @@
 ;; and returns a list of the same elements in reverse order
 
 (define (reverse items)
-  (cond ((or (null? items) 
-             (null? (cdr items))) 
-         items)
+  (cond ((null? items) items)
         (else (append (reverse (cdr items))
                     (list (car items))))))
 
