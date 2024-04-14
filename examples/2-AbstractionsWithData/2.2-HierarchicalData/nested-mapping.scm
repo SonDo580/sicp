@@ -33,7 +33,7 @@
 ;;             (map (lambda (i)
 ;;                          (map (lambda (j) (list i j))
 ;;                               (enumerate-interval 1 (- i 1))))
-;;                  (enumerate_interval 1 n)))
+;;                  (enumerate-interval 1 n)))
 
 ;; Generate the above code with this procedure
 (define (flatmap proc seq)
