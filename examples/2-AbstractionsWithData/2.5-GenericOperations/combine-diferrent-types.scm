@@ -1,5 +1,6 @@
 ;; Note: The code extends generic-artithmetic.scm
 
+;; COERCION
 ;; Assume that there are put-coercion and get-coercion procedures
 ;; for manipulating  a special coercion table
 
@@ -35,3 +36,12 @@
                     (else (error "No method for these types"
                                  (list op type-tags))))))
           (error "No method for these types" (list op type-tags)))))))
+
+;; HIRARCHIES OF TYPES
+;; - tower of types
+;; - raise
+;; - inherit
+;; - lower
+
+;; INADEQUACIES OF HIRARCHIES
+;; - complex arrangement of mixed types
