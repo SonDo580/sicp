@@ -63,10 +63,15 @@
     (("d" "c") (5 0))
     (("d" "d") (1 1))))
 
+;; note that you will need to write extract-entry
+;; Problem 1: extract-entry
+(define (extract-entry play game-association-list)
+  (cond ((equal? (caar game-association-list) play) 
+         (cdar game-association-list))
+        (else (extract-entry play (cdr game-association-list)))))
+
 (define (get-point-list game)
   (cadr (extract-entry game *game-association-list*)))
-
-;; note that you will need to write extract-entry
 
 (define make-play list)
 
@@ -80,18 +85,23 @@
 
 ;; A sampler of strategies
 
+;; always defect
 (define (NASTY my-history other-history)
   "d")
 
+;; always cooperate
 (define (PATSY my-history other-history)
   "c")
 
+;; cooperates or defects on a random basis
 (define (SPASTIC my-history other-history)
   (if (= (random 2) 0)
       "c"
       "d"))
 
-(define (EGALITARIAN  my-history other-history)
+;; cooperate on the 1st round.
+;; examine opponent's action history on subsequent rounds.
+(define (EGALITARIAN my-history other-history)
   (define (count-instances-of test hist)
     (cond ((empty-history? hist) 0)
 	  ((string=? (most-recent-play hist) test)
@@ -101,6 +111,8 @@
 	(cs (count-instances-of "c" other-history)))
     (if (> ds cs) "d" "c")))
 
+;; cooperate on the 1st round.
+;; mimic opponent's previous move on subsequent rounds.
 (define (EYE-FOR-EYE my-history other-history)
   (if (empty-history? my-history)
       "c"
@@ -148,3 +160,8 @@
 ;                                                               hist1
 ;                                                               hist2)))))
 
+;; Test extract-entry
+(extract-entry (make-play "c" "c") *game-association-list*) ; (3 3)
+(extract-entry (make-play "c" "d") *game-association-list*) ; (0 5)
+(extract-entry (make-play "d" "c") *game-association-list*) ; (5 0)
+(extract-entry (make-play "d" "d") *game-association-list*) ; (1 1)
