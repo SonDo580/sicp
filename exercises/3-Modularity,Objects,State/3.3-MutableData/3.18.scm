@@ -1,5 +1,6 @@
 ;; Write a program to detect cycle in a list
 
+;; Functional style
 (define (detect-cycle lst)
   (define (encountered? current encountered)
     (cond ((null? encountered) 
@@ -14,9 +15,27 @@
           ((encountered? current encountered) 
            true)
           (else (iter (cdr current) (cons current encountered)))))
-  (if (null? lst)
-    false
-    (iter lst '())))
+  (iter lst '()))
+
+;; With mutation
+(define (detect-cycle-2 lst)
+  (let ((encountered '()))
+    (define (encountered? current encountered-lst)
+      (cond ((null? encountered-lst)
+             false)
+            ((eq? current (car encountered-lst))
+             true)
+            (else
+             (encountered? current (cdr encountered-lst)))))
+    (define (iter current)
+      (cond ((null? current)
+             false)
+            ((encountered? current encountered)
+             true)
+            (else
+             (begin (set! encountered (cons current encountered))
+                    (iter (cdr current))))))
+    (iter lst)))
 
 ;; Test
 (define (last-pair x)
@@ -35,12 +54,16 @@
 
 ; should be true
 (detect-cycle z1) 
+(detect-cycle-2 z1) 
 
 ; should be false
 (detect-cycle z2) 
+(detect-cycle-2 z2) 
 
 ; should be false
 (detect-cycle z3) 
+(detect-cycle-2 z3) 
 
 ; should be true
 (detect-cycle z4) 
+(detect-cycle-2 z4) 
