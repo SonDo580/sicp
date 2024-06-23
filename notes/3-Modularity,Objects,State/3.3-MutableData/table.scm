@@ -71,8 +71,8 @@
           false)))
     
     (define (insert! key1 key2 value)
-      (let (subtable
-            (assoc key1 (cdr local-table)))
+      (let ((subtable
+             (assoc key1 (cdr local-table))))
         (if subtable
           (let ((record
                  (assoc key2 (cdr subtable))))
@@ -85,16 +85,25 @@
                     (cons (list key1
                                 (cons key2 value))
                           (cdr local-table)))))
-        'ok))
+        'ok)
     
     (define (dispatch m)
       (cond ((eq? m 'lookup-proc) lookup)
             ((eq? m 'insert-proc!) insert!)
             (else (error "Unknown operation: TABLE" m))))
     
-    dispatch)
+    dispatch))
 
 ;; Implement get/put (See note 2.4/data-directed-programming)
 (define operation-table (make-table))
 (define get (operation-table 'lookup-proc))
 (define put (operation-table 'insert-proc!))
+
+;; TEST
+(put 'letters 'a 97)
+
+;; should return 97
+(get 'letters 'a)
+
+;; should return false
+(get 'letters 'b)
