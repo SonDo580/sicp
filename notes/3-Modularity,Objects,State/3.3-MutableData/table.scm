@@ -1,6 +1,6 @@
 ;; Find the first record that has the given key as its car
 (define (assoc key records)
-  (cond ((null? record?) false)
+  (cond ((null? records) false)
         ((equal? key (caar records))
          (car records))
         (else (assoc key (cdr records)))))
