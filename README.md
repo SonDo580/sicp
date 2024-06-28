@@ -1,6 +1,6 @@
 # SICP
 
-- Learn from the book: Structure and Intepretation of Computer Programs
+- Learn from the book: Structure and Interpretation of Computer Programs
 
 ## Learning materials:
 
