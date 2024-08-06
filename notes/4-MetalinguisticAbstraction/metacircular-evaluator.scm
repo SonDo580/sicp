@@ -34,7 +34,7 @@
 
 ;; Procedure arguments
 (define (list-of-values exps env)
-  (if (no-operand? exps)
+  (if (no-operands? exps)
     '()
     (cons (eval (first-operand exps) env)
           (list-of-values (rest-operands exps) env))))
@@ -179,7 +179,7 @@
           (sequence->exp (cond-actions first))
           (error "ELSE clause isn't last: COND->IF" clauses))
         (make-if (cond-predicate first)
-                 (sequence->exp (cond-action first))
+                 (sequence->exp (cond-actions first))
                  (expand-clauses rest))))))
 
 ;; 3) DATA STRUCTURES
@@ -344,7 +344,7 @@
         ((assignment? exp) (analyze-assignment exp))
         ((definition? exp) (analyze-definition exp))
         ((if? exp) (analyze-if exp))
-        ((lambda? exp) (analyze-lamda exp))
+        ((lambda? exp) (analyze-lambda exp))
         ((begin? exp) (analyze-sequence (begin-actions exp)))
         ((cond? exp) (analyze (cond->if exp)))
         ((application? exp) (analyze-application exp))
@@ -396,7 +396,7 @@
 ;; - each expressions is analyzed, yielding an execution procedure
 ;; - the procedures are combined to produce an execution procedure
 ;;   that sequentially calls each individual procedure 
-(define (analyze-sequece exps)
+(define (analyze-sequence exps)
   (define (sequentially proc1 proc2)
     (lambda (env) (proc1 env) (proc2 env)))
   (define (loop first-proc rest-procs)
