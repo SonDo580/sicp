@@ -1,3 +1,6 @@
+;; REFERENCE: note 4.1/metacircular-evaluator
+
+;; LAZY EVALUATOR:
 ;; - When applying a procedure, the interpreter must determine which 
 ;; arguments are to be evaluated and which are to be delayed
 ;; - The delayed arguments are not evaluated, they are transformed into objects 
@@ -5,8 +8,6 @@
 ;; - The thunk must contain the information required to produce the value of 
 ;; the argument when it is needed (argument expression + environment)
 ;; - The process of evaluating the expression in a thunk is called 'forcing'
-
-;; REFERENCE: notes 4/metacircular-evaluator
 
 ;; modified 'eval' (application? ...)
 (define (eval exp env)
