@@ -59,3 +59,31 @@
   (let ((sent (parse-sentence)))
     (require (null? *unparsed*))
     sent))
+
+;; NOTE: a given input may have more than one legal parse
+
+(parse '(the professor lectures to the student with the cat))
+;; (sentence
+;;  (simple-noun-phrase (article the) (noun professor))
+;;  (verb-phrase
+;;   (verb-phrase
+;;    (verb lectures)
+;;    (prep-phrase
+;;     (prep to)
+;;     (simple-noun-phrase (article the) (noun student))))
+;;   (prep-phrase
+;;    (prep with)
+;;    (simple-noun-phrase (article the) (noun cat)))))
+
+;; try-again
+;; (sentence
+;;  (simple-noun-phrase (article the) (noun professor))
+;;  (verb-phrase
+;;  (verb lectures)
+;;  (prep-phrase
+;;  (prep to)
+;;  (noun-phrase
+;;      (simple-noun-phrase (article the) (noun student))
+;;      (prep-phrase
+;;       (prep with)
+;;       (simple-noun-phrase (article the) (noun cat)))))))
