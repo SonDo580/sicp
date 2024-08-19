@@ -227,24 +227,30 @@
         (cadr index-entry)
         '())))
 
-;; TO BE IMPLEMENTED
-;;(define (add-to-index! index key value) ; Index,Key,Val -> Index
-;;  (let ((index-entry (find-entry-in-index index key)))
-;;    (if (null? index-entry)
-;;      ;; no entry -- create and insert a new one...
-;;	;... TO BE IMPLEMENTED
-;;
-;;      ;; entry exists -- insert value if not already there...
-;;	;... TO BE IMPLEMENTED
-;;	))
-;;  index)
+(define (add-to-index! index key value) ; Index,Key,Val -> Index
+ (let ((index-entry (find-entry-in-index index key)))
+   (if (null? index-entry)
+     ;; no entry -- create and insert a new one...
+	   (set-cdr! index (cons (list key (list value)) (cdr index)))
+     ;; entry exists -- insert value if not already there...
+	   (set-car! (cdr index-entry) (cons value (cadr index-entry)))))
+ index)
+
+;; Box diagram of index:
+;; [ | ]---[ | ]-----------[ |X]
+;;  |       |               |
+;; index   [ | ]---[ |X]   [ | ]---[ |X]
+;;          |       |       |       |
+;;        key2     val2    key1    [ | ]---[ |X]
+;;                                  |       |
+;;                                 val1`   val1
 
 ;; Testing
 ;; (define test-index (make-index))
 ;; (add-to-index! test-index 'key1 'value1)
 ;; (add-to-index! test-index 'key2 'value2)
 ;; (add-to-index! test-index 'key1 'another-value1)
-;; 
+
 ;; (find-in-index test-index 'key1)
 ;; (find-in-index test-index 'key2)
 
