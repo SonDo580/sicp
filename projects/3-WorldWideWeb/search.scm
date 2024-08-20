@@ -227,6 +227,7 @@
         (cadr index-entry)
         '())))
 
+;; Warm up 1
 (define (add-to-index! index key value) ; Index,Key,Val -> Index
  (let ((index-entry (find-entry-in-index index key)))
    (if (null? index-entry)
@@ -302,6 +303,10 @@
 ;;    '(... words extracted from http://sicp.csail.mit.edu/getting-help.html))
 ;;   ...))
 
+;; Warm up 2
+;; - DFS-simple will fail on the-web graph because it contains cycle
+;;   / -> /projects -> /SchemeImplementations
+;;   |______________________________________|
 
 ;;--------------------
 ;; Searching the Web
