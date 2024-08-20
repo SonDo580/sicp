@@ -168,14 +168,25 @@
   (search start
 	  goal?
 	  find-node-children
-	  (lambda (new old) (append new old))
+	  (lambda (new old) (append new old)) ; stack
 	  graph))
 
+;; (DFS-simple 'a
+;;             (lambda (node) (eq? node 'l))
+;;             test-graph)
 
-; (DFS-simple 'a
-;             (lambda (node) (eq? node 'l))
-;             test-graph)
-  
+;; Exercise 1: BFS-simple
+;; Note: this will still fail if the graph contains cycles  
+(define (BFS-simple start goal? graph)
+  (search start
+          goal?
+          find-node-children
+          (lambda (new old) (append old new)) ; queue
+          graph))
+
+;; (BFS-simple 'a
+;;             (lambda (node) (eq? node 'l))
+;;             test-graph)
 
 ;; you will need to write a similar search procedure that handles cycles
 
@@ -305,8 +316,8 @@
 
 ;; Warm up 2
 ;; - DFS-simple will fail on the-web graph because it contains cycle
-;;   / -> /projects -> /SchemeImplementations
-;;   |______________________________________|
+;;   / -> /projects -> /getting-help.html
+;;   |__________________________________|
 
 ;;--------------------
 ;; Searching the Web
