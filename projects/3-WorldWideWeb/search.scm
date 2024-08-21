@@ -188,8 +188,86 @@
 ;;             (lambda (node) (eq? node 'l))
 ;;             test-graph)
 
-;; you will need to write a similar search procedure that handles cycles
+;; Exercise 2: Marking visited nodes
+(define (search-with-cycles initial-state goal? successors merge graph)
+  (let ((visited '()))
+    (define (visited? visited node)
+      (cond ((null? visited) false)
+            ((eq? (car visited) node) true)
+            (else (visited? (cdr visited) node))))
+    (define (search-inner still-to-do)
+      (if (null? still-to-do)
+        #f
+         (let ((current (car still-to-do)))
+           (if (visited? visited current)
+             (search-inner (cdr still-to-do))
+             (begin
+              (set! visited (cons current visited))
+              (if *search-debug*
+                (write-line (list 'now-at current)))
+              (if (goal? current)
+                #t
+                 (search-inner
+                  (merge (successors graph current) (cdr still-to-do)))))))))
+    (search-inner (list initial-state))))
 
+(define (DFS start goal? graph)
+  (search-with-cycles 
+   start
+   goal?
+   find-node-children
+   (lambda (new old) (append new old))
+   graph))
+
+(define (BFS start goal? graph)
+  (search-with-cycles
+   start
+   goal?
+   find-node-children
+   (lambda (new old) (append old new))
+   graph))
+
+;; (DFS 'a
+;;      (lambda (node) (eq? node 'l))
+;;      test-cycle)
+;; 
+;; (now-at a)
+;; (now-at b)
+;; (now-at c)
+;; ;Value: #f
+
+;; (BFS 'a
+;;      (lambda (node) (eq? node 'l))
+;;      test-cycle)
+;; 
+;; (now-at a)
+;; (now-at b)
+;; (now-at c)
+;; ;Value: #f
+
+;; (DFS 'http://sicp.csail.mit.edu/
+;;      (lambda (node) (eq? node 'http://sicp.csail.mit.edu/not-exist))
+;;      the-web)
+;; 
+;; (now-at http://sicp.csail.mit.edu/)
+;; (now-at http://sicp.csail.mit.edu/schemeimplementations)
+;; (now-at http://sicp.csail.mit.edu/getting-help.html)
+;; (now-at http://sicp.csail.mit.edu/lab-use.html)
+;; (now-at *the-goal*)
+;; (now-at http://sicp.csail.mit.edu/psets)
+;; ;Value: #f
+
+;; (BFS 'http://sicp.csail.mit.edu/
+;;      (lambda (node) (eq? node 'http://sicp.csail.mit.edu/not-exist))
+;;      the-web)
+;;
+;; (now-at http://sicp.csail.mit.edu/)
+;; (now-at http://sicp.csail.mit.edu/schemeimplementations)
+;; (now-at http://sicp.csail.mit.edu/psets)
+;; (now-at http://sicp.csail.mit.edu/getting-help.html)
+;; (now-at http://sicp.csail.mit.edu/lab-use.html)
+;; (now-at *the-goal*)
+;; ;Value: #f
 
 ;;;------------------------------------------------------------
 ;;; Index Abstraction
