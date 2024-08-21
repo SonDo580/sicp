@@ -188,18 +188,22 @@
 ;;             (lambda (node) (eq? node 'l))
 ;;             test-graph)
 
+;; Helper: check if a list contains an element
+(define (include? items elem)
+  (cond ((null? items) false)
+        ((eq? (car items) elem) true)
+        (else (include? (cdr items) elem))))
+
 ;; Exercise 2: Marking visited nodes
 (define (search-with-cycles initial-state goal? successors merge graph)
   (let ((visited '()))
-    (define (visited? visited node)
-      (cond ((null? visited) false)
-            ((eq? (car visited) node) true)
-            (else (visited? (cdr visited) node))))
+    (define (visited? node)
+      (include? visited node))
     (define (search-inner still-to-do)
       (if (null? still-to-do)
         #f
          (let ((current (car still-to-do)))
-           (if (visited? visited current)
+           (if (visited? current)
              (search-inner (cdr still-to-do))
              (begin
               (set! visited (cons current visited))
@@ -323,7 +327,9 @@
      ;; no entry -- create and insert a new one...
 	   (set-cdr! index (cons (list key (list value)) (cdr index)))
      ;; entry exists -- insert value if not already there...
-	   (set-car! (cdr index-entry) (cons value (cadr index-entry)))))
+     (if (not (include? (cadr index-entry) value))
+       (set-car! (cdr index-entry) 
+                 (cons value (cadr index-entry))))))
  index)
 
 ;; Box diagram of index:
@@ -337,22 +343,24 @@
 
 ;; Testing / Exercise 3
 
-(define test-index (make-index))
+;; (define test-index (make-index))
 
-(add-to-index! test-index 'key1 'value1)
-;Value: (index (key1 (value1)))
+;; (add-to-index! test-index 'key1 'value1)
+;; (add-to-index! test-index 'key1 'value1)
+;; (add-to-index! test-index 'key1 'value1)
+;; ;Value: (index (key1 (value1)))
 
-(add-to-index! test-index 'key2 'value2)
-;Value: (index (key2 (value2)) (key1 (value1)))
+;; (add-to-index! test-index 'key2 'value2)
+;; ;Value: (index (key2 (value2)) (key1 (value1)))
 
-(add-to-index! test-index 'key1 'another-value1)
-;Value: (index (key2 (value2)) (key1 (another-value1 value1)))
+;; (add-to-index! test-index 'key1 'another-value1)
+;; ;Value: (index (key2 (value2)) (key1 (another-value1 value1)))
 
-(find-in-index test-index 'key1)
-;Value: (another-value1 value1)
+;; (find-in-index test-index 'key1)
+;; ;Value: (another-value1 value1)
 
-(find-in-index test-index 'key2)
-;Value: (value2)
+;; (find-in-index test-index 'key2)
+;; ;Value: (value2)
 
 ;;------------------------------------------------------------
 ;; Finally, the Web!
@@ -428,12 +436,13 @@
 ;; web, and then key each of the words in the
 ;; text into the index.
 
-;; TO BE IMPLEMENTED
+;; Exercise 4: Web index
 ;; add-document-to-index!: Index, Web, URL
 ;; (define (add-document-to-index! index web url)
-;; ...
-;; )
-
+;;   (define (add-word))
+;;   ()
+;;   (let (content (find-URL-text web url))
+;;     (define )))
 
 ;; Example use
 ;; 
