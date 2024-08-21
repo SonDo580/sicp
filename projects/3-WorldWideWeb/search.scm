@@ -335,15 +335,24 @@
 ;;                                  |       |
 ;;                                 val1`   val1
 
-;; Testing
-;; (define test-index (make-index))
-;; (add-to-index! test-index 'key1 'value1)
-;; (add-to-index! test-index 'key2 'value2)
-;; (add-to-index! test-index 'key1 'another-value1)
+;; Testing / Exercise 3
 
-;; (find-in-index test-index 'key1)
-;; (find-in-index test-index 'key2)
+(define test-index (make-index))
 
+(add-to-index! test-index 'key1 'value1)
+;Value: (index (key1 (value1)))
+
+(add-to-index! test-index 'key2 'value2)
+;Value: (index (key2 (value2)) (key1 (value1)))
+
+(add-to-index! test-index 'key1 'another-value1)
+;Value: (index (key2 (value2)) (key1 (another-value1 value1)))
+
+(find-in-index test-index 'key1)
+;Value: (another-value1 value1)
+
+(find-in-index test-index 'key2)
+;Value: (value2)
 
 ;;------------------------------------------------------------
 ;; Finally, the Web!
