@@ -461,6 +461,62 @@
 ;; (find-in-index the-web-index '*magic*)
 ;; ;; ;Value: ()
 
+;;------------------------------------------------------------
+;; Excersise 5: Crawling the Web to build an index
+
+;; traverse: 
+;; - similar to search 
+;; - allow an action to take place at each node
+(define (traverse initial-state goal? successors merge graph action)
+  (let ((visited '()))
+    (define (visited? node)
+      (include? visited node))
+    (define (traverse-inner still-to-do)
+      (if (null? still-to-do)
+        #f
+         (let ((current (car still-to-do)))
+           (if (visited? current)
+             (traverse-inner (cdr still-to-do))
+             (begin
+              (action current)
+              (set! visited (cons current visited))
+              (if *search-debug*
+                (write-line (list 'now-at current)))
+              (if (goal? current)
+                #t
+                 (traverse-inner
+                  (merge (successors graph current) (cdr still-to-do)))))))))
+    (traverse-inner (list initial-state))))
+
+(define (BF-traverse start goal? graph action)
+  (traverse
+   start
+   goal?
+   find-node-children
+   (lambda (new old) (append old new))
+   graph
+   action))
+
+;; make-web-index
+;; - creates a new index
+;; - find all URLs that can be reached from a given web and intial URL
+;;   and indexes them
+;; - returns a procedure to look up all the URLs of documents containing 
+;;   a word
+(define (make-web-index web initial-url)
+  (let ((web-index (make-index)))
+    (BF-traverse initial-url
+                 (lambda (node) false)
+                 web
+                 (lambda (url)
+                         (add-document-to-index! web-index web url)))
+    (lambda (word)
+            (find-in-index web-index word))))
+
+;; Test:
+(define find-documents (make-web-index the-web 'http://sicp.csail.mit.edu/))
+(find-documents 'collaborative)
+;Value: (http://sicp.csail.mit.edu/psets http://sicp.csail.mit.edu/)
 
 ;;------------------------------------------------------------
 ;; utility for timing procedure calls.
