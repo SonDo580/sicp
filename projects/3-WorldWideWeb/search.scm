@@ -438,25 +438,28 @@
 
 ;; Exercise 4: Web index
 ;; add-document-to-index!: Index, Web, URL
-;; (define (add-document-to-index! index web url)
-;;   (define (add-word))
-;;   ()
-;;   (let (content (find-URL-text web url))
-;;     (define )))
+(define (add-document-to-index! index web url)
+  (define (add-words-to-index! words)
+    (if (not (null? words))
+      (begin
+       (add-to-index! index (car words) url)
+       (add-words-to-index! (cdr words)))))
+  (add-words-to-index! (find-URL-text web url))
+  index)
 
 ;; Example use
 ;; 
 ;; (define the-web-index (make-index))
-;; 
+
 ;; (add-document-to-index! the-web-index
 ;;                         the-web 
 ;;                         'http://sicp.csail.mit.edu/)
-;; 
-;; (find-in-index 'help)
-;; ;Value: (http://sicp.csail.mit.edu/)
-;; 
-;; (find-in-index '*magic*)
-;; ;Value: #f
+
+;; (find-in-index the-web-index 'help)
+;; ;; ;Value: (http://sicp.csail.mit.edu/)
+
+;; (find-in-index the-web-index '*magic*)
+;; ;; ;Value: ()
 
 
 ;;------------------------------------------------------------
