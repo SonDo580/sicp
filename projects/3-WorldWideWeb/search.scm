@@ -514,9 +514,79 @@
             (find-in-index web-index word))))
 
 ;; Test:
-(define find-documents (make-web-index the-web 'http://sicp.csail.mit.edu/))
-(find-documents 'collaborative)
+;; (define find-documents (make-web-index the-web 'http://sicp.csail.mit.edu/))
+;; (find-documents 'collaborative)
 ;Value: (http://sicp.csail.mit.edu/psets http://sicp.csail.mit.edu/)
+
+;;------------------------------------------------------------
+;; Excersise 6: Dynamic web search
+
+;; find:
+;; - similar to search-with-cycle
+;; - any = false -> find all nodes
+;; - any = true -> find any node and stop
+(define (find initial-state goal? successors merge graph any)
+  (let ((visited '())
+        (found '()))
+    (define (visited? node)
+      (include? visited node))
+    (define (find-inner still-to-do)
+      (if (null? still-to-do)
+         found
+         (let ((current (car still-to-do)))
+           (if (visited? current)
+             (find-inner (cdr still-to-do))
+             (begin
+              (set! visited (cons current visited))
+              (if *search-debug*
+                (write-line (list 'now-at current)))
+              (if (goal? current)
+                 (begin
+                  (set! found (cons current found))
+                  (if any 
+                    found
+                    (find-inner
+                     (merge (successors graph current) (cdr still-to-do)))))
+                 (find-inner
+                  (merge (successors graph current) (cdr still-to-do)))))))))
+    (find-inner (list initial-state))))
+
+(define (BF-find start goal? graph any)
+  (find
+   start
+   goal?
+   find-node-children
+   (lambda (new old) (append old new))
+   graph
+   any))
+
+;; search-any:
+;; - search the indicated web with breadth-first strategy
+;; - return the first document that contains the given word
+(define (search-any web start_node word)
+  (BF-find 
+   start_node
+   (lambda (node) (include? (find-node-contents web node) word))
+   web
+   true))
+
+;; search-all:
+;; - search the indicated web with breadth-first strategy
+;; - return all the documents that contain the given word
+(define (search-all web start_node word)
+  (BF-find
+   start_node
+   (lambda (node) (include? (find-node-contents web node) word))
+   web
+   false))
+
+;; Test:
+
+;; (search-any the-web 'http://sicp.csail.mit.edu/ 'collaborative)
+;; ;Value: (http://sicp.csail.mit.edu/)
+
+;; (search-all the-web 'http://sicp.csail.mit.edu/ 'collaborative)
+;; ;Value: (http://sicp.csail.mit.edu/psets http://sicp.csail.mit.edu/)
 
 ;;------------------------------------------------------------
 ;; utility for timing procedure calls.
