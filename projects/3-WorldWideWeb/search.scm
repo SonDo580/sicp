@@ -589,6 +589,80 @@
 ;; ;Value: (http://sicp.csail.mit.edu/psets http://sicp.csail.mit.edu/)
 
 ;;------------------------------------------------------------
+;; Exercise 7: Comparison - Web Index vs. Dynamic Search
+
+;; (define web1 (generate-random-web 30))
+;; (define web2 (generate-random-web 60))
+;; (define web3 (generate-random-web 90))
+;; (define web4 (generate-random-web 120))
+;; (define web5 (generate-random-web 150))
+;; (define web6 (generate-random-web 180))
+
+;; (timed search-any web1 '*start* 'help) ; 9.999999999999787e-3
+;; (timed search-any web2 '*start* 'help) ; 1.0000000000000231e-2
+;; (timed search-any web3 '*start* 'help) ; 9.999999999999787e-3
+;; (timed search-any web4 '*start* 'help) ; 4.0000000000000036e-2
+;; (timed search-any web5 '*start* 'help) ; 1.0000000000000231e-2
+;; (timed search-any web6 '*start* 'help) ; 9.999999999999787e-3
+
+;; (timed search-any web1 '*start* 'Susan-hockfield) ; .11000000000000032
+;; (timed search-any web2 '*start* 'Susan-hockfield) ; .13999999999999968
+;; (timed search-any web3 '*start* 'Susan-hockfield) ; .2200000000000002
+;; (timed search-any web4 '*start* 'Susan-hockfield) ; .23999999999999977
+;; (timed search-any web5 '*start* 'Susan-hockfield) ; .41999999999999993
+;; (timed search-any web6 '*start* 'Susan-hockfield) ; .4299999999999997
+
+;; (timed search-all web1 '*start* 'help) ; .11000000000000032
+;; (timed search-all web2 '*start* 'help) ; .11000000000000032
+;; (timed search-all web3 '*start* 'help) ; .23999999999999932
+;; (timed search-all web4 '*start* 'help) ; .2999999999999998
+;; (timed search-all web5 '*start* 'help) ; .3899999999999997
+;; (timed search-all web6 '*start* 'help) ; .5
+
+;; (timed make-web-index web1 '*start*) ; .27000000000000046
+;; (timed make-web-index web2 '*start*) ; .4900000000000002
+;; (timed make-web-index web3 '*start*) ; .9100000000000001
+;; (timed make-web-index web4 '*start*) ; 1.3099999999999987
+;; (timed make-web-index web5 '*start*) ; 1.6900000000000013
+;; (timed make-web-index web6 '*start*) ; 2.3599999999999994
+
+;; (define find-documents-1 (make-web-index web1 '*start*))
+;; (define find-documents-2 (make-web-index web2 '*start*))
+;; (define find-documents-3 (make-web-index web3 '*start*))
+;; (define find-documents-4 (make-web-index web4 '*start*))
+;; (define find-documents-5 (make-web-index web5 '*start*))
+;; (define find-documents-6 (make-web-index web6 '*start*))
+
+;; (timed find-documents-1 'help) ; 0.
+;; (timed find-documents-2 'help) ; 0.
+;; (timed find-documents-3 'help) ; 0.
+;; (timed find-documents-4 'help) ; 0.
+;; (timed find-documents-5 'help) ; 0.
+;; (timed find-documents-6 'help) ; 0.
+
+;; (timed find-documents-1 'Susan-hockfield) ; 0.
+;; (timed find-documents-2 'Susan-hockfield) ; 0.
+;; (timed find-documents-3 'Susan-hockfield) ; 0.
+;; (timed find-documents-4 'Susan-hockfield) ; .00999999999999801
+;; (timed find-documents-5 'Susan-hockfield) ; 0.
+;; (timed find-documents-6 'Susan-hockfield) ; 1.0000000000001563e-2
+
+;; => Observation:
+;; - search-any a word that is in the web is faster than search-any 
+;;   a word that is not in the web
+;; - search-any a word that is not in the web takes approximately 
+;;   the same amount of time as seach-all, and the time is propotional 
+;;   to the number of nodes
+;; - building an index takes longer than searching directly, and the time
+;;   is proportional to the number nodes
+;; - once we have an index, searching is almost instantaneous
+
+;; => Factors to consider when building a search engine
+;; - Size of dataset
+;; - Search / Update frequency
+;; - User expectation
+
+;;------------------------------------------------------------
 ;; utility for timing procedure calls.
 ;; returns the time in seconds
 
