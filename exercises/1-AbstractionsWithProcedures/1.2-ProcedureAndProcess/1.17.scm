@@ -1,4 +1,4 @@
-;; Assume our language can only add, not multiply
+;; Assume that our language can only add, not multiply
 ;; We can perform multiplication by repeated addition
 ;; The algorithm takes a number of steps that is linear in b
 (define (slow-mult a b)
@@ -6,7 +6,7 @@
     0
     (+ a (slow-mult a (- b 1)))))
 
-;; Together with addition, we have 'double' and 'halve'
+;; Also assume that we have 'double' and 'halve'
 ;; (double integer) => 2 * integer
 ;; (halve even-integer) => even-integer / 2  
 
@@ -18,15 +18,4 @@
         ((= b 1) a)
         ((= a 1) b)
         ((even? b) (fast-mult (double a) (halve b)))
-        (else (+ a (recursive-mult (double a) (halve (- b 1)))))))
-
-(define (even? n)
-  (= 0 (remainder n 2)))
-
-;; Helpers: double 
-(define (double n)
-  (* n 2))
-
-;; Helpers: halve (only accept even number)  
-(define (halve n)
-  (/ n 2))
+        (else (+ a (fast-mult (double a) (halve (- b 1)))))))
