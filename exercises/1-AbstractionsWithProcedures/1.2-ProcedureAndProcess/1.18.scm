@@ -12,11 +12,14 @@
 
 ;; Iterative process
 (define (iterative-mult a b)
-  (define (iter A B sum) 
-     (cond ((= B 0) sum)
-           ((even? B) (iter (double A) (halve B) sum))
-           (else (iter A (- B 1) (A + sum)))))
-  (iter A B 0))
+  (define (iter A B sum)
+    (cond ((= B 0) sum)
+          ((even? B) (iter (double A) (halve B) sum))
+          (else (iter A (- B 1) (+ A sum)))))
+  (cond ((or (= a 0) (= b 0)) 0)
+        ((= b 1) a)
+        ((= a 1) b)
+        (else (iter a b 0))))
 
 ;; ANALYZE:
 ;; b is even: a * b = (2*a) * (b/2)
@@ -29,15 +32,3 @@
 ;; > 10 + 20 * 2
 ;; > 10 + 40 * 1
 ;; > 10 + 40
-
-
-
-;; HELPERS
-(define (even? n)
-  (= 0 (remainder n 2)))
-
-(define (double n)
-  (* n 2))
-
-(define (halve n) ;; only accept even number
-  (/ n 2))
