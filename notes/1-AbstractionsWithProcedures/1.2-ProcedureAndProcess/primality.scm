@@ -77,10 +77,10 @@
 ;; PROBABILISTIC METHODS
 
 ;; - In Fermat test, the answer obtained is only probably correct.
-;; - If n ever fails the Fermat test, we can be certain that n is not prime.
-;;   But if n passing the test is not a guarantee that n is prime.
-;; - There are numbers that fool the Ferma test - they are not prime but
-;;   a^n is congruent to a modulo n for all integers a < n
-;; - These numbers are called Carmichael numbers. They are extremely rare,
-;;   so the chance of stumbling upon them in Fermat test is very low
+;; - If n fails the Fermat test, we can be certain that n is not prime.
+;;   But n passing the test is not a guarantee that n is prime.
+;; - There are numbers that fool the Ferma test (Carmichael numbers). 
+;;   a is not prime, a^n is congruent to a modulo n for all integers a < n
 ;;   (561, 1105, 1729, 2465, 2821, 6601,...)
+;; - These numbers are extremely rare, so the chance of stumbling upon 
+;;   them in Fermat test is very low.
