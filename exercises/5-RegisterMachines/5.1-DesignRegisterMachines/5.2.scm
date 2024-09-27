@@ -8,12 +8,13 @@
 
 ;; Factorial machine           
 (controller
- (assign product (const 1))
- (assign counter (const 1))
+   (assign n (op read))
+   (assign product (const 1))
+   (assign counter (const 1))
  test-counter
- (test (op >) (reg counter) (reg n))
- (branch (label fact-done))
- (assign counter (op inc) (reg counter))
- (assign product (op mul) (reg counter) (reg product))
- (goto (label test-counter))
+   (test (op >) (reg counter) (reg n))
+   (branch (label fact-done))
+   (assign counter (op +) (reg counter) (const 1))
+   (assign product (op *) (reg counter) (reg product))
+   (goto (label test-counter))
  fact-done)   
